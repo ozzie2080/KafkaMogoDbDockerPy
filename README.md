@@ -10,7 +10,7 @@ an alert, and then will save the recepie in our MongoDB repository
 
 Our design:
 
-<image src="myrecipiesdocker.png">
+<image src="myrecipieskafkamongo.png">
  
 
 ### Acknowledgement
