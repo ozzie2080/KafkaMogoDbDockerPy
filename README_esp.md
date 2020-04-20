@@ -10,30 +10,9 @@ generar un alerta y vamos a guardar la receta en nuestro repositorio en MongoDB.
 
 <diagrama generado utilizando plantuml for Gitlab>
 
-
-```plantuml
-
-skinparam Shadowing false
+<img src="myrecipieskafkamongo.png">
 
 
-Recepies.com <- PythonScraper: Lee las recetas
-PythonScraper -> Kafka: Envia recetas a topic: RAW 
-PythonParser o--> Kafka : Lee recetas de topic: RAW
-PythonParser -> PythonParser: Parse en Json 
-Kafka <- PythonParser: Envia recectas topic: PARSED
-Kafka <- AlertService: Lee recetas topic: PARSED
-AlertService -> AlertService: si la condicion aplica
-
-box "Docker Container" #LightGray
-database MongoDB #green
-AlertService -[#green]-> MongoDB: Guarda recetas en JSON DB-collection
-end box
-
-actor Bob #blue
-AlertService -[#0000FF]> Bob: envia alertas 
-
-'!include ../../plantuml-styles/ae-copyright-footer.txt
-```
 ### Agradecimiento
 Quiero agradecer a todos aquellos que han publicado documentacion en Gitlab, Medium, TowarsDataScience, y otros canales. Gracias a ellos pude crear este 
 ejemplo ilustrando los varios componentes del stack technico.
