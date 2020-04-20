@@ -2,73 +2,11 @@
 
 ## Architecture of the solution - Kafka with only one node
 
+<img src="myrecipiesdocker.png">
+
 #### STEP 1: Initialize Kafka/Zookeeper Containers 
 
 Command: `docker-compose -f docker-compose-single-broker.yml up -d`
-
-```plantuml
-title Kafka Single Broker
-
-Rectangle "Localhost 10.233.18.50" as localhost {
-    
-  Rectangle kafka-subnetwork {
-    
-    Package "Kafka Broker - docker" as kafka #CCDDEE  {
-       [Kafka container\n172.20.0.2] as kafka1 
-       [ZooKeeper container\n172.20.0.3] as zoo 
-       component "Gateway\n172.20.0.1" as Gateway
-
-       kafka1 ..> Gateway : 9092
-        zoo ..> Gateway : 2181 
-    }
-  }
-
- 
-  Rectangle kafka-shell-subnet {
-     
-     package "Kafka-shell docker" as kafkash #CCCCEE {
-       [$/start-kafka-shell.sh 10.233.18.50\n172.17.0.2]
-     }
-     [Gateway\n172.17.0.1] as Gateway1
-
-     kafkash <..> Gateway1
-  }
-  
-  
-  Rectangle MongoDB-subnetwork {
-    Package "MongoDB - docker " as mongodb #CCCCDD {
-       Database MongoDB #CCEEDD {
-          Folder "collections" {
-          ["recipies"]
-          }
-        }
-    }
-    [Gateway\n172.19.0.2] as Gateway2 
-    
-    Gateway2 <..> mongodb : 27017
-  } 
-  
-  Database volume {
-      ["localhost volume"]
-  }
-  
-  volume <..> MongoDB
-  (External Network) as Net
-  Gateway1 <..> Net : shell
-  Gateway <..> Net : 9092 / 2181
-  Gateway2 <..> Net : 27017
-
-  Net <..> User_Localhost
-    
-}
-
-```
-
-    [Access Point] as HTTP
-    Gateway ..> HTTP: 9092:9092 /\n 2181:2181 (expose)
-
-    MongoDB ..> HTTP : 27017:27017 (expose)
-    HTTP <..> Net : $KAFKA_ADVERTISED_HOST_NAME\n10.233.18.50
 
 
 This is the content of the file docker-compose.yml that we are going to use.  Verify
