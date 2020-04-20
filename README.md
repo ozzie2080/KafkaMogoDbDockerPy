@@ -10,40 +10,9 @@ an alert, and then will save the recepie in our MongoDB repository
 
 Our design:
 
+<image src="myrecipiesdocker.png">
+ 
 
-```plantuml
-
-skinparam Shadowing false
-
-participant Recepies.com
-
-participant raw_recipies.py as PythonScraper <<PythonScraper>>
-participant parse_recipies.py as PythonParser <<PythonParser>>
-database Kafka
-participant consumer_save.py as AlertService <<AlertService>>
-
-Recepies.com <- PythonScraper: 1. read recipies
-PythonScraper -> Kafka: 2. send recipies a topic: RAW
-PythonParser o--> Kafka : read recipies from topic: RAW
-PythonParser -> PythonParser: Parse in Json 
-
-Kafka <- PythonParser: send recipies to topic: PARSED
-Kafka <- AlertService: read recipies from topic: PARSED
-AlertService -> AlertService: if condition applies\nadds to file
-
-activate AlertService 
- box "Docker Container" #LightGray
-  database MongoDB #green
-  AlertService -[#green]-> MongoDB: Save recipies in JSON DB-collection
- end box
-
- actor Bob #blue
- AlertService -[#0000FF]> Bob: send alerts (email)
-
-deactivate
-
-'!include ../../plantuml-styles/ae-copyright-footer.txt
-```
 ### Acknowledgement
 I would like to thank those who published documentation on Gitlab, Medium, TowarsDataScience, and other channels. Thanks to them, I a was able to create
 this example demonstrating all the various components in the technical stack.
